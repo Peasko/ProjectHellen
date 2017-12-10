@@ -2,6 +2,7 @@ package sk.tuke.oop.game.actions;
 
 import sk.tuke.oop.framework.Actor;
 import sk.tuke.oop.framework.ActorContainer;
+import sk.tuke.oop.framework.World;
 
 public class Take<A extends Actor> implements Action {
 
@@ -19,3 +20,4 @@ public class Take<A extends Actor> implements Action {
         actor.getWorld().removeActor(actor);
     }
 }
+

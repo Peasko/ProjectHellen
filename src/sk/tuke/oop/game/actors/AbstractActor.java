@@ -96,6 +96,15 @@ abstract public class AbstractActor implements Actor {
         return intersectingActors;
     }
 
+    public Actor getActorByName(String name) {
+        for (Actor actor : getWorld()) {
+            if (actor.getName().equals(name)) {
+                return actor;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "{"

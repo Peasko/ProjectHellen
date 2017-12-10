@@ -22,12 +22,14 @@ public class Ripley extends AbstractActor implements Movable {
     private int health = 20;
     private int ammo = 100;
     private Backpack backpack;
+    private Animation dead;
 
     public Ripley(String name) {
         super(name);
         this.name = "Ripleyova";
         setPosition(200, 200);
         setAnimation(new Animation("sprites/player.png", 32, 32, 100));
+        dead = new Animation("sprites/player_die.png", 32, 32, 100);
         setHeight(32);
         setWidth(32);
         this.backpack = new Backpack(10);
@@ -41,13 +43,9 @@ public class Ripley extends AbstractActor implements Movable {
             System.exit(0);
         } else if (input.isKeyPressed(Key.E)) {
             for (Actor actor : getWorld()) {
-                if (intersects(actor)) {
-                    if (actor instanceof Ventilator) {
-                        ((Ventilator) actor).useBy(this);
-                    } else if (actor instanceof Body) {
-                        ((Body) actor).useBy(this);
-                        break;
-                    }
+                if (intersects(actor) && actor instanceof Usable) {
+                    ((Usable) actor).useBy(this);
+                    break;
                 }
             }
         } else if (input.isKeyPressed(Key.ENTER)) {
@@ -55,20 +53,19 @@ public class Ripley extends AbstractActor implements Movable {
                 if (actor instanceof Item && intersects(actor)) {
                     Take takeItem = new Take(backpack, actor);
                     takeItem.execute();
+                    break;
                 }
             }
         } else if (input.isKeyPressed(Key.BACK)) {
-            if (backpack.peek() != null) {
-                Drop drop = new Drop(backpack, getWorld(), getX(), getY());
-                drop.execute();
-            }
+            Drop drop = new Drop(backpack, getWorld(), getX(), getY());
+            drop.execute();
         } else if (input.isKeyPressed(Key.S)) {
             Shift shift = new Shift(backpack);
             shift.execute();
-        } else if (input.isKeyDown(Key.UP)
+        } else if ((input.isKeyDown(Key.UP)
                 || input.isKeyDown(Key.DOWN)
                 || input.isKeyDown(Key.LEFT)
-                || input.isKeyDown(Key.RIGHT)) {
+                || input.isKeyDown(Key.RIGHT)) && health > 0) {
             int moveX = 0;
             int moveY = 0;
             if (input.isKeyDown(Key.UP)) {
@@ -92,12 +89,19 @@ public class Ripley extends AbstractActor implements Movable {
             if (actor instanceof Alien && intersects(actor)) {
                 health--;
             }
-            if (health == 0) {
-                System.exit(0);
-            }
+//            if (health == 0) {
+//                System.exit(0);
+//            }
         }
 
         getWorld().showMessage(new Message("Health: " + health + "\nAmmo: " + ammo, 10, 40));
+
+        if (health == 0) {
+            setAnimation(this.dead);
+            this.dead.setLooping(false);
+            this.dead.start();
+            this.health = 0;
+        }
     }
 
     @Override
@@ -121,5 +125,9 @@ public class Ripley extends AbstractActor implements Movable {
 
     public void setAmmo(int ammo) {
         this.ammo = ammo;
+    }
+
+    public Backpack getBackpack() {
+        return backpack;
     }
 }

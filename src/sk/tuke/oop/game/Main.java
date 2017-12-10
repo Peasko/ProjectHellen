@@ -21,22 +21,23 @@ public class Main {
         System.out.println("Greetings from Manager");
 
         SlickWorld world = new SlickWorld("Aliens", 800, 600);
+
         GameActorFactory factory = new GameActorFactory();
         world.setFactory(factory);
         world.setMap("levels/level.09.tmx");
 
 
-//        Ripley ripley = new Ripley();
+//        Ripley ripley = new Ripley("Hellen");
 //        ripley.setPosition(100, 100);
-//        Alien alien = new Alien();
+//        Alien alien = new Alien("Zubok");
 //        alien.setPosition(300, 300);
-//        Energy aid = new Energy();
+//        Energy aid = new Energy("Lekvarnicka");
 //        aid.setPosition(500, 500);
-//        Ammo ammo = new Ammo();
+//        Ammo ammo = new Ammo("Naboje");
 //        ammo.setPosition(100, 450);
-//        Ventilator ventilator = new Ventilator();
+//        Ventilator ventilator = new Ventilator("Fukar");
 //        ventilator.setPosition(500, 250);
-//        Body body = new Body();
+//        Body body = new Body("Telo");
 //        body.setPosition(500, 70);
 //
 //        world.addActor(ripley);

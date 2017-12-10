@@ -32,6 +32,10 @@ public class GameActorFactory implements ActorFactory {
             return new Locker("Locker");
         }
 
+        if (name.equals("door")) {
+            return new LockedDoor("Locked Door");
+        }
+
         return null;
     }
 }
