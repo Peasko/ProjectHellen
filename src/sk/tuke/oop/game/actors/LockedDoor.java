@@ -2,7 +2,6 @@ package sk.tuke.oop.game.actors;
 
 import sk.tuke.oop.framework.Actor;
 import sk.tuke.oop.framework.Animation;
-import sk.tuke.oop.framework.Item;
 import sk.tuke.oop.framework.World;
 
 public class LockedDoor extends AbstractActor implements Usable, Openable {
@@ -10,7 +9,7 @@ public class LockedDoor extends AbstractActor implements Usable, Openable {
     private boolean locked;
     private boolean opened;
     private int tileSize;
-    private int counter = 100;
+    private int counter;
     private boolean poisonSpreading = true;
 
     public LockedDoor(String name) {
@@ -21,8 +20,8 @@ public class LockedDoor extends AbstractActor implements Usable, Openable {
         getAnimation().stop();
         locked = true;
         opened = false;
-//        getWorld().setWall(getX(), getY(), true);
         tileSize = 16;
+        counter = 100;
     }
 
     public void lock() {
@@ -40,7 +39,6 @@ public class LockedDoor extends AbstractActor implements Usable, Openable {
     @Override
     public void addedToWorld(World world) {
         super.addedToWorld(world);
-
     }
 
     @Override
@@ -78,6 +76,7 @@ public class LockedDoor extends AbstractActor implements Usable, Openable {
             getAnimation().start();
             getAnimation().stopAt(3);
             poisonSpreading = true;
+            this.opened = true;
         }
     }
 
@@ -86,6 +85,7 @@ public class LockedDoor extends AbstractActor implements Usable, Openable {
         getWorld().setWall(getX() / tileSize, getY() / tileSize, true);
         getAnimation().start();
         getAnimation().stopAt(0);
+        this.opened = false;
     }
 
     @Override
@@ -98,10 +98,8 @@ public class LockedDoor extends AbstractActor implements Usable, Openable {
             }
             if (!opened) {
                 open();
-                opened = true;
             } else {
                 close();
-                opened = false;
             }
         }
     }

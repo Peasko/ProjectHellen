@@ -21,10 +21,10 @@ public class Drop<A extends Actor> implements Action {
     @Override
     public void execute() {
         if (container.getContent().size() > 0) {
-            Actor peekItem = container.peek();
+            A peekItem = container.peek();
             world.addActor(peekItem);
             peekItem.setPosition(x, y);
-            container.remove(container.peek());
+            container.remove(peekItem);
         }
     }
 

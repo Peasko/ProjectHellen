@@ -8,31 +8,30 @@ import sk.tuke.oop.framework.Actor;
 import sk.tuke.oop.framework.ActorContainer;
 import sk.tuke.oop.framework.Item;
 
-public class Backpack implements ActorContainer {
+//ActorContainer<? extends Actor>
+public class Backpack implements ActorContainer<Item> {
 
     private int capacity;
     private String name;
-    private ArrayList<Actor> content;
+    private final List<Item> content;
 
     public Backpack(int capacity) {
         this.capacity = capacity;
-        content = new ArrayList<Actor>(capacity);
+        this.content = new ArrayList<>(capacity);
     }
 
     @Override
-    public void add(Actor actor) {
-        if (actor instanceof Item) {
-            if (content.size() < capacity) {
-                content.add(actor);
-            } else {
-                throw new ArrayIndexOutOfBoundsException();
-            }
+    public void add(Item actor) {
+        if (content.size() < capacity) {
+            content.add(actor);
+        } else {
+            throw new ArrayIndexOutOfBoundsException();
         }
     }
 
     @Override
-    public void remove(Actor actor) {
-        if (actor instanceof Item && content.size() > 0 && containsItem(actor)) {
+    public void remove(Item actor) {
+        if (content.size() > 0 && containsItem(actor)) {
             content.remove(actor);
         } else {
             throw new NoSuchElementException();
@@ -50,21 +49,33 @@ public class Backpack implements ActorContainer {
 
     //vrati posledny item vlozeny do batoha
     @Override
-    public Actor peek() {
+    public Item peek() {
+        if (content.size() == 0) {
+            return null;
+        }
         return content.get(content.size() - 1);
     }
 
     @Override
-    public List getContent() {
+    public List<Item> getContent() {
         return content;
     }
 
     //presunie posledny pridany prvok na dno batoha
     @Override
     public void shiftContent() {
-        Actor itemToMove = peek();
-        content.remove(itemToMove);
-        content.add(0, itemToMove);
+        if (content.size() == 0) {
+            return;
+        }
+
+        final Item itemToMove = peek();
+        int idx = content.size() - 1;
+        while (idx > 0) {
+            Item prevItem = content.get(idx - 1);
+            content.set(idx, prevItem);
+            idx--;
+        }
+        content.set(0, itemToMove);
     }
 
     @Override
@@ -78,7 +89,17 @@ public class Backpack implements ActorContainer {
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<Item> iterator() {
         return content.iterator();
     }
+
+    @Override
+    public String toString() {
+        return "{"
+                + "\"capacity\":\"" + capacity + "\""
+                + ", \"name\":\"" + name + "\""
+                + ", \"content\":" + content
+                + "}";
+    }
+
 }

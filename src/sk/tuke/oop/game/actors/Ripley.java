@@ -13,7 +13,6 @@ import sk.tuke.oop.game.actions.Move;
 import sk.tuke.oop.game.actions.Shift;
 import sk.tuke.oop.game.actions.Take;
 import sk.tuke.oop.game.items.Backpack;
-import sk.tuke.oop.game.items.Hammer;
 
 public class Ripley extends AbstractActor implements Movable {
 
@@ -42,7 +41,7 @@ public class Ripley extends AbstractActor implements Movable {
         if (input.isKeyPressed(Key.ESCAPE)) {
             System.exit(0);
         } else if (input.isKeyPressed(Key.E)) {
-            for (Actor actor : getWorld()) {
+            for (Actor actor : this.getWorld()) {
                 if (intersects(actor) && actor instanceof Usable) {
                     ((Usable) actor).useBy(this);
                     break;
@@ -107,7 +106,7 @@ public class Ripley extends AbstractActor implements Movable {
     @Override
     public void addedToWorld(World world) {
         super.addedToWorld(world);
-        world.showActorContainer(backpack);
+//        world.showActorContainer(backpack);
         world.centerOn(this);
     }
 
